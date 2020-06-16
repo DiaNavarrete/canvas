@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{{ url_for('static', filename='style/styles.css') }}" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Artifika&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+
+
+  <title>CANVAS</title>
+</head>
+
+<body>
+    {% include 'header.html' %}
+        <div class="mayor-container">
+            <div class="container-info">
+                <div>
+                    <b >Proyecto: </b><br/>
+                    <p id="project-name" contenteditable=true onkeypress="return (this.innerText.length <= 50)">
+                        {%- if project -%}
+                            {{project['project_name']}}
+                        {%- endif %} </p>
+                    <br/>
+                    <b>Propietario:</b><br/><span id="project-user">{{user}}</span>
+                    <br/><br/>
+                    <b>Fecha de creación:</b><br/><span id="project-date">
+                        {%- if project -%}
+                            {{project['creation_date']}}
+                        {%- endif %} 
+                    </span>
+                    <br/><br/>
+                    <b>Última modificación: </b><br/>
+                        {%- if project-%}
+                            {{project['last_modified_date']}}
+                        {%- endif %} 
+                </div><br/>
+                <div>
+                    <br/>
+                    {%- if project-%}
+                        <span style="display:none;" id="project_id">{{project['ID']}}</span>
+                    {%- endif -%} 
+                    <div id="container-zoom"> 
+                        <a onclick="zoom(true)" class=" waves-effect btn-floating deep-purple lighten-5">
+                            <i class="material-icons">add</i></a>
+                        <a onclick="zoom(false)" class=" waves-effect btn-floating deep-purple lighten-5">
+                            <i class="material-icons">remove</i></a>
+                    </div>
+                    <button onclick="showPresentation()" class="button waves-effect btn deep-purple">Presentar</button> 
+                    <button onclick="saveCanvas()" class="button waves-effect btn deep-purple" id="save_btn">Guardar</button> 
+                    <button onclick="deleteCanvas()" class="button waves-effect btn deep-purple" id="delete_btn">Eliminar</button> 
+                </div>
+            </div>
+            <div id='container-project'>
+                <div id='project-canvas'>
+                    <p id="canvas-title" contenteditable=true onkeypress="return (this.innerText.length <= 50)">
+                        {%- if project-%}
+                            {{project['canvas_title']}}
+                        {% else %}
+                            CANVAS PARA EL DISEÑO DE PROYECTOS
+                        {%- endif %}
+                    </p>
+                        <div class="container-canvas">
+                        {% for column in boxes %}
+                            <div class="col">
+                                {% for box in column %}
+                                    <div class="container-box">
+                                        <span class='title-box'>{{box['title']}} </span>
+                                        <i class="material-icons">{{box['icon']}}</i>
+                                        <p class="editable-box" id={{box['ID']}} contenteditable=true 
+                                            onkeypress="return (this.innerText.length <= 250)">
+                                            {%- if box['box_text'] -%}
+                                                {{box['box_text']}}
+                                            {% else %}
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                                                sed do eiusmod tempor  
+                                            {%- endif %}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                
+                    </div>
+                    <button onclick="closePresentation()" class="button waves-effect btn deep-purple" id='close_btn'>Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>
